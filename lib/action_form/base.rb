@@ -9,5 +9,9 @@ module ActionForm
     def initialize(object)
       @object = object
     end
+
+    def save
+      object.save
+    end
   end
 end
