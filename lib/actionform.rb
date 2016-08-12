@@ -1,5 +1,1 @@
-require "actionform/version"
-
-module Actionform
-  # Your code goes here...
-end
+require 'action_form'

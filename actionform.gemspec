@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'actionform/version'
+require 'action_form/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "actionform"
-  spec.version       = Actionform::VERSION
+  spec.version       = ActionForm::VERSION
   spec.authors       = ["pinglamb"]
   spec.email         = ["pinglambs@gmail.com"]
 
