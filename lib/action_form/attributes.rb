@@ -19,17 +19,21 @@ module ActionForm
         end
       end
 
-      def attribute(name)
+      def attribute(name, options = {})
         _attributes_data << name
-        class_eval <<-EORUBY
-          def #{name}
-            object.#{name}
-          end
+        if options[:virtual]
+          attr_accessor name
+        else
+          class_eval <<-EORUBY
+            def #{name}
+              object.#{name}
+            end
 
-          def #{name}=(value)
-            object.#{name} = value
-          end
-        EORUBY
+            def #{name}=(value)
+              object.#{name} = value
+            end
+          EORUBY
+        end
       end
 
       def _attributes

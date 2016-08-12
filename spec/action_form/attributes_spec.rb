@@ -5,7 +5,7 @@ describe ActionForm::Attributes do
     form_class = Class.new(ActionForm::Base) do
       attribute :name
     end
-    form_object = form_class.new(Object.new)
+    form_object = form_class.new(User.new)
     expect(form_object).to respond_to(:name=)
     expect(form_object).to respond_to(:name)
   end
@@ -15,11 +15,22 @@ describe ActionForm::Attributes do
       attributes :name, :email
       attributes :phone
     end
-    form_object = form_class.new(Object.new)
+    form_object = form_class.new(User.new)
     %i(name email phone).each do |field|
       expect(form_object).to respond_to(:"#{field}=")
       expect(form_object).to respond_to(:"#{field}")
     end
+  end
+
+  it 'supports defining virtual attribute that underlying model does not have' do
+    expect(User.new).not_to respond_to(:foo)
+
+    form_class = Class.new(ActionForm::Base) do
+      attribute :foo, virtual: true
+    end
+    form_object = form_class.new(User.new)
+    form_object.foo = 'bar'
+    expect(form_object.foo).to eq('bar')
   end
 
   it 'reads the value of attribute from underlying object' do
