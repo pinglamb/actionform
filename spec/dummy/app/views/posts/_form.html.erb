@@ -1,0 +1,12 @@
+<%= form_for @form do |f| %>
+  <p>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :content %>
+    <br />
+    <%= f.text_area :content, rows: 16, cols: 80 %>
+  </p>
+  <p><%= f.submit %>
+<% end %>
