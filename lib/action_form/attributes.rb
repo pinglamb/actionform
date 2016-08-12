@@ -10,13 +10,13 @@ module ActionForm
       end
 
       def attribute(name)
-        class_eval <<-EORUBY, __FILE__, __LINE__ + 1
+        class_eval <<-EORUBY
           def #{name}
-            object.name
+            object.#{name}
           end
 
           def #{name}=(value)
-            object.name = value
+            object.#{name} = value
           end
         EORUBY
       end
