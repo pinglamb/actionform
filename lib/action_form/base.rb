@@ -15,6 +15,14 @@ module ActionForm
       @object = object
     end
 
+    def assign_attributes(attrs)
+      if attrs.respond_to?(:permit)
+        attrs = attrs.permit(self.class._attributes)
+      end
+
+      super(attrs)
+    end
+
     def save
       object.save
     end
