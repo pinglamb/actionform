@@ -5,6 +5,7 @@ require 'action_form/attributes'
 module ActionForm
   class Base
     include ActiveModel::AttributeAssignment
+    include ActiveModel::Validations
     include ActionForm::Attributes
 
     attr_reader :object
@@ -26,7 +27,7 @@ module ActionForm
     end
 
     def save
-      object.save
+      valid? && object.save
     end
   end
 end
