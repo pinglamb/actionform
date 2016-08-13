@@ -1,5 +1,5 @@
 class PostForm < ActionForm::Base
-  attributes :title, :content
+  attributes :title, :content, :slug
   attribute :publish, virtual: true
 
   validates :title, presence: true

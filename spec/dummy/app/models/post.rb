@@ -1,4 +1,6 @@
 class Post < ApplicationRecord
+  validates :slug, presence: true, uniqueness: true
+
   def publish
     self.published_at = Time.zone.now
   end
