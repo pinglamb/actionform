@@ -11,7 +11,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @form.assign_attributes(post_params)
+    @form.submit(post_params)
     if @form.save
       redirect_to @post, notice: 'Post was created successfully.'
     else
@@ -26,7 +26,7 @@ class PostsController < ApplicationController
   end
 
   def update
-    @form.assign_attributes(post_params)
+    @form.submit(post_params)
     if @form.save
       redirect_to @post, notice: 'Post was updated successfully.'
     else

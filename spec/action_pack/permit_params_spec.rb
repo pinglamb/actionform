@@ -8,7 +8,7 @@ describe 'With ActionPack' do
       secret: 'xxxxxx'
     })
     form = PostForm.new(Post.new)
-    form.assign_attributes(params)
+    form.submit(params)
     expect(form.title).to eq('Hello')
     expect(form.content).to eq('Hello World!')
   end
