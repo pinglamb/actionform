@@ -1,5 +1,5 @@
 class Post < ApplicationRecord
-  has_many :comments
+  has_many :comments, inverse_of: :post
 
   validates :slug, presence: true, uniqueness: true
 

@@ -1,3 +1,3 @@
 class Comment < ApplicationRecord
-  belongs_to :post, required: false
+  belongs_to :post, inverse_of: :comments
 end
