@@ -1,12 +1,16 @@
 require 'active_model/attribute_assignment'
+require 'active_record/nested_attributes'
 
 require 'action_form/attributes'
+require 'action_form/associations'
 
 module ActionForm
   class Base
     include ActiveModel::AttributeAssignment
     include ActiveModel::Validations
+    include ActiveRecord::NestedAttributes
     include ActionForm::Attributes
+    include ActionForm::Associations
 
     attr_reader :object
 
@@ -44,6 +48,12 @@ module ActionForm
         object.save
       else
         false
+      end
+    end
+
+    class << self
+      def model_class
+        @model_class ||= name.sub(/Form$/, '').to_s.camelize.constantize
       end
     end
   end

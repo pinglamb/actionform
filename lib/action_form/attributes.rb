@@ -24,7 +24,7 @@ module ActionForm
         if options[:virtual]
           attr_accessor name
         else
-          class_eval <<-EORUBY
+          class_eval <<-EORUBY, __FILE__, __LINE__ + 1
             def #{name}
               object.#{name}
             end

@@ -1,4 +1,6 @@
 class Post < ApplicationRecord
+  has_many :comments
+
   validates :slug, presence: true, uniqueness: true
 
   def publish
