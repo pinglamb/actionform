@@ -1,5 +1,13 @@
 <h1><%= @post.title %></h1>
 <div><%= @post.content %></div>
+<div>
+  <p><strong>Comments</strong></p>
+  <ul>
+  <% @post.comments.each.with_index do |comment| %>
+    <li><%= comment.body %></li>
+  <% end %>
+  </ul>
+</div>
 <% if @post.published? %>
 <p>Published at <strong><%= @post.published_at %></strong></p>
 <% end %>

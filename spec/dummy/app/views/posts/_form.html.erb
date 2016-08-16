@@ -13,6 +13,13 @@
     <br />
     <%= f.text_area :content, rows: 16, cols: 80 %>
   </p>
+
+  <p><strong>Comments</strong></p>
+  <%= f.fields_for :comments do |ff| %>
+    <%= render 'comment_fields', f: ff%>
+  <% end %>
+  <p><%= link_to_add_association 'Add Comment', f, :comments %></p>
+
   <p>
     <%= f.submit 'Publish', name: 'post[publish]' %>
     <%= f.submit %>

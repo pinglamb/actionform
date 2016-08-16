@@ -59,8 +59,8 @@ describe ActionForm::Associations do
           comments_attributes: {
             @comment.id.to_s => { id: @comment.id.to_s, body: 'Nice! Yeah' },
             @comment2.id.to_s => { id: @comment2.id.to_s, _destroy: '1' },
-            '20160815173054998' => { body: 'New Comment 1' },
-            '20160815173055999' => { body: 'Another New Comment 2' }
+            '1471373511437' => { body: 'New Comment 1' },
+            '1471373511438' => { body: 'Another New Comment 2' }
           }
         })
         expect {

@@ -24,7 +24,17 @@ module ActionForm
     def submit(attrs)
       unless attrs.nil?
         if attrs.respond_to?(:permit)
-          attrs = attrs.permit(self.class._attributes)
+          permitted_params = self.class._attributes.dup
+          nested_attributes_options.each do |association_name, option|
+            permitted_nested_params = %i(id)
+            associated_form = "#{association_name.to_s.singularize.camelize}Form".constantize
+            permitted_nested_params.concat(associated_form._attributes)
+            if option[:allow_destroy]
+              permitted_nested_params << :_destroy
+            end
+            permitted_params << { :"#{association_name}_attributes" => permitted_nested_params }
+          end
+          attrs = attrs.permit(permitted_params)
         end
 
         assign_attributes(attrs)

@@ -4,7 +4,6 @@ module ActionForm
 
     included do
       class_attribute :_associations_data, instance_writer: false, instance_reader: false
-      self._associations_data ||= []
 
       delegate :association, to: :object
     end
@@ -12,7 +11,7 @@ module ActionForm
     class_methods do
       def inherited(base)
         super
-        base._associations_data = _associations_data.dup
+        base.nested_attributes_options = nested_attributes_options.dup
       end
 
       def has_one(association_name, options = {})
@@ -35,15 +34,19 @@ module ActionForm
           nested_attributes_options = self.nested_attributes_options.dup
           nested_attributes_options[association_name.to_sym] = options
           self.nested_attributes_options = nested_attributes_options
-          self._associations_data << association_name
 
+          delegate association_name, to: :object
           generate_association_writer(association_name, type)
         else
           raise ArgumentError, "No association found for name `#{association_name}'. Has it been defined yet?"
         end
       end
 
-      def _reflect_on_association(*args, &block)
+      def reflect_on_association(*args)
+        model_class.reflect_on_association(*args)
+      end
+
+      def _reflect_on_association(*args)
         model_class._reflect_on_association(*args)
       end
 
@@ -63,7 +66,7 @@ module ActionForm
       end
 
       def _associations
-        _associations_data
+        nested_attributes_options.keys
       end
     end
   end
