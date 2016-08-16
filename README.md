@@ -1,39 +1,80 @@
 # ActionForm
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/actionform`. To experiment with that code, run `bin/console` for an interactive prompt.
+Form object is not just a good way of refactoring Fat Model, but also useful for decoupling the form related logic from the ActiveRecord model. For this project, I have 4 goals to achieve:
 
-TODO: Delete this and the text above, and describe your gem
+- Free ActiveRecord from `accepts_nested_attributes_for`, nested form definition should be in ActionForm
+- Auto permit params according to your form definition
+- Form specific validations and callbacks to prevent polluting the model with `if/unless` cases
+- Allow defining virtual attributes on form object for triggering form specific actions
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Put this in your `Gemfile` and run `bundle install`.
 
-```ruby
-gem 'actionform'
+```RUBY
+gem 'actionform', github: 'pinglamb/actionform'
 ```
 
-And then execute:
+## Form Definition
 
-    $ bundle
+In `app/forms/post_form.rb`,
 
-Or install it yourself as:
+```RUBY
+class PostForm < ActionForm::Base
+  attributes :title, :content
+  attribute :publish, virtual: true
+  
+  has_many :comments, allow_destroy: true, reject_if: :all_blank
+end
+```
 
-    $ gem install actionform
+In your controller (e.g. `app/controllers/posts_controller.rb`),
 
-## Usage
+```RUBY
+class PostsController < ApplicationController
+  before_action :build_post, only: %i(new create)
+  before_action :set_form, only: %i(new create)
+  
+  def new
+  end
+  
+  def create
+    @form.submit(params[:post])
+    if @form.save
+      redirect_to @post, notice: 'Post was created successfully.'
+    else
+      render action: 'new'
+    end
+  end
+  
+  private
+  
+  def build_post
+    @post = Post.new
+  end
+  
+  def set_form
+    @form = PostForm.new(@post)
+  end
+end
+```
 
-TODO: Write usage instructions here
+In your view (e.g. `app/views/posts/_form.html.slim`),
 
-## Development
+```SLIM
+= form_for @form do |f|
+  = f.text_field :title
+  = f.text_area :content
+  = f.submit
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Dynamic Nested Form
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+This gem doesn't have the javascript for adding/removing nested fields. If you want that, the form object works well with [nathanvda/cocoon](https://github.com/nathanvda/cocoon).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/actionform.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/pinglamb/actionform.
 
 ## License
 
